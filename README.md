@@ -2,17 +2,49 @@
 
 ## Welcome
 
+Bienvenida a un taller para dar tus primeros pasos en el mundo de la programación o, en caso de ser una veterana en el lenguaje, la posibilidad para ampliar tus conocimientos en el lenguaje.
+
+Tal vez estés asustada. ¡No te preocupes si no tienes experiencia previa picando código!, este taller está diseñado para que puedas seguirlo sin problemas. Además, estarás siempre acompañada por una mentora simpatiquísima que te guiará en todo momento.
+
+Solo te pedimos 3 requisitos para empezar:
+
+- Un ordenador con conexión a internet.
+- Seguir las instrucciones de tu mentor.
+- Ganas de aprender.
+
+No esperamos que lo termines todo, pero si lo haces, ¡enhorabuena! Habrás creado tu primer blog con Django. Te animamos a que mantengas una comunicación fluida con tu mentor y le hagas todas las preguntas que necesites.
+
+¿Estas preparada? ¡Vamos a ello!
+
 ### ¿Qué es Python? ¿Por qué Python?
 
 Python es un lenguaje de programación interpretado cuya filosofía hace hincapié en una sintaxis que favorezca un código legible. Se trata de un lenguaje de programación multiparadigma, ya que soporta orientación a objetos, programación imperativa y, en menor medida, programación funcional. Lo único importante para ti es que es perfecto para principiantes y expertos, y es uno de los lenguajes más populares en la actualidad.
 
+Sería una buena oportunidad para aprender lo más elemental (lee la expansión que hay un poco más abajo).
+
+- Variables.
+- Tipos de datos.
+- Estructuras de control.
+- Loops.
+- Funciones.
+
+En caso contrario, puedes saltarte esta parte.
+
 - Preguntas que puedes hacer al mentor: ¿Qué es un lenguaje de programación interpretado? ¿Qué es un lenguaje de programación multiparadigma? ¿Qué otros lengaujes de programación son populares?
+
+Expansiones:
+
+- [Tutorial de Python](https://developer.mozilla.org/es/docs/Glossary/Python)
 
 ### ¿Qué es Django? ¿Por qué Django? Alternativas y sus diferencias
 
 Django es un framework web para construir apicaciones web en Python (un blog, un ecommerce, una red social, etc). Lo usaremos para construir fácilmente nuestro blog.
 
 - Preguntas que puedes hacer al mentor: ¿Qué es un framework web? ¿Qué otros frameworks web existen? ¿Por qué Django es tan popular?
+
+Expansiones:
+
+- [Tutorial de Django](https://developer.mozilla.org/es/docs/Learn_web_development/Extensions/Server-side/Django/Introduction)
 
 ## Preparando el entorno de desarrollo
 
@@ -75,6 +107,10 @@ services:
 Ya esta tu entorno de desarrollo listo.
 
 - Preguntas que puedes hacer al mentor: ¿Qué es un archivo Dockerfile? ¿Qué es un archivo docker-compose.yml?
+
+Expansiones:
+
+- [Tutorial de Docker](https://www.freecodecamp.org/espanol/news/guia-de-docker-para-principiantes-como-crear-tu-primera-aplicacion-docker/)
 
 ## Creando un proyecto Django
 
@@ -286,6 +322,11 @@ Ves a `http://localhost:8000/` y deberías ver los artículos que has añadido e
 
 - Preguntas que puedes hacer al mentor: ¿Qué es HTML? ¿Qué es `for`? ¿De donde sale `article`?
 
+Expansiones:
+
+- [Tutorial de HTML por Mozilla](https://developer.mozilla.org/es/docs/Learn/HTML/Introduction_to_HTML).
+- [Tutorial de HTML por Andros Fenollosa](https://programadorwebvalencia.com/cursos/html/).
+
 ### Decorando un poco la página con CSS
 
 Vamos a añadir un poco de estilo a la página. Crea un archivo `style.css` en la carpeta `my_blog/static/css` con el siguiente contenido:
@@ -344,6 +385,11 @@ Vuelve a cargar la página y deberías ver los cambios.
 ¡Bien hecho!
 
 - Preguntas que puedes hacer al mentor: ¿Qué es CSS? ¿Qué es `link`?
+
+Expansiones:
+
+- [Tutorial de CSS por Mozilla](https://developer.mozilla.org/es/docs/Learn/CSS/First_steps).
+- [Tutorial de CSS por Andros Fenollosa](https://programadorwebvalencia.com/cursos/css/).
 
 ### Creando una página individual para cada artículo
 
@@ -420,3 +466,4 @@ Habla con tu mentor sobre cómo puedes expandir tu blog. Aquí tienes algunas id
 - Añadir un sistema de likes.
 - Añadir un sistema de comentarios.
 - Incorporar un buscador.
+- [Crea un chat en tiempo real](https://programadorwebvalencia.com/django-chat-usando-websockets-con-salas-y-async/).
