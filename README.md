@@ -89,9 +89,9 @@ RUN pip3 install --no-cache-dir --upgrade pip
 RUN pip3 install --no-cache-dir -r requirements.txt
 ```
 
-Acabas de definir una imagen. Sirven para crear contenedores. Un contenedor es una instancia de una imagen. Para crear un contenedor, necesitas un archivo `docker-compose.yml`.
+Acabas de definir una imagen. Sirven para crear contenedores. Un contenedor es una instancia de una imagen. Para crear un contenedor, necesitas un archivo `compose.yml`.
 
-Crea un archivo `docker-compose.yml` en la raíz de tu proyecto con el siguiente contenido:
+Crea un archivo `compose.yml` en la raíz de tu proyecto con el siguiente contenido:
 
 ```compose
 services:
@@ -106,7 +106,7 @@ services:
 
 Ya esta tu entorno de desarrollo listo.
 
-- Preguntas que puedes hacer al mentor: ¿Qué es un archivo Dockerfile? ¿Qué es un archivo docker-compose.yml?
+- Preguntas que puedes hacer al mentor: ¿Qué es un archivo `Dockerfile`? ¿Qué es un archivo `compose.yml`?
 
 Expansiones:
 
@@ -116,37 +116,49 @@ Expansiones:
 
 Ahora vamos a crear un proyecto Django usando Docker.
 
+Primero crea un archivo `requirements.txt` en la raíz de tu proyecto con el siguiente contenido:
+
+```txt
+Django
+pillow
+```
+
+Estamos definiendo las dependencias de nuestro proyecto. En este caso, Django (el framework web) y Pillow (una librería para trabajar con imágenes).
+
+Ahora crea un proyecto Django:
+
 ```bash
 docker compose run django django-admin startproject my_app .
 docker compose run django python manage.py startapp my_blog
 cd my_blog
 ```
 
-- Preguntas que puedes hacer al mentor: ¿Qué es un proyecto Django? ¿Qué es una aplicación Django?
+- Preguntas que puedes hacer al mentor: ¿Qué es un proyecto Django? ¿Qué es una aplicación Django? ¿Por qué necesitamos un archivo `requirements.txt`?
 
 
 ### Configuraciones básicas
 
-Edita el archivo `my_blog/settings.py` para asegurarte de que las configuraciones de bases de datos, aplicaciones instaladas, y middleware sean correctas. En principio no necesitas cambiar nada, pero es bueno saber dónde están estas configuraciones.
+Edita el archivo `my_app/settings.py` para asegurarte de que las configuraciones de bases de datos, aplicaciones instaladas, y middleware sean correctas. En principio no necesitas cambiar nada, pero es bueno saber dónde están estas configuraciones.
 
 
 ### Base de datos
 
-Django por defecto usa SQLite, un motor de base de datos ligero y fácil de usar. Para este tutorial, SQLite es suficiente. Si necesitas usar otro motor de base de datos, puedes cambiar la configuración en `my_blog/settings.py`.
+Una base de datos es un sistema de almacenamiento de información. Piensa en ella como una hoja de cálculo, o tabla gigante, donde puedes guardar y recuperar información de forma ordenada. Por ejemplo, puedes guardar cada artículo de tu blog en una fila. No solo tendrá contenido, sino también otros datos importantes como el título, la fecha de creación, las etiquetas, etc. Cada fila es un registro en la base de datos con columnas. Para recoperar último artículo que has añadido, puedes hacer una consulta a la base de datos pidiendo que te dé el último registro, o con la fecha más reciente, o con el título más largo, etc.
+
+Django por defecto usa SQLite, un motor de base de datos ligero y fácil de usar. Para este tutorial, SQLite es suficiente. Si necesitas usar otro motor de base de datos, puedes cambiar la configuración en `my_app/settings.py`. Django soporta muchos motores de base de datos, como PostgreSQL, MySQL, Oracle, etc. No es necesario modificar nada.
 
 - Preguntas que puedes hacer al mentor: ¿Qué es una base de datos? ¿Qué es un motor de base de datos? ¿Qué es SQLite? ¿Qué otros motores de base de datos existen?
 
+Expansiones:
+
+- [Tutorial de SQL resolviendo crímenes](https://www.sqlnoir.com/)
+- [Tutorial de SQL y SQLite](https://programadorwebvalencia.com/cursos/sql/)
+
 ### Levantando el servidor
 
-Es el  momento de levantar el servidor de desarrollo de Django. Ejecuta el siguiente comando:
+Es el  momento de levantar el servidor de desarrollo de Django.
 
-```bash
-docker compose django python manage.py runserver
-```
-
-Abre tu navegador y ve a `http://localhost:8000/`. Deberías ver una página de bienvenida de Django.
-
-Para automatizar el comando, podemos modificar el archivo `docker-compose.yml`:
+Primero debemos editar el archivo `compose.yml` para que Django se quede funcionando:
 
 ```compose
 services:
@@ -157,16 +169,34 @@ services:
       - .:/usr/src/app/
     ports:
     - "8000:8000"
-    command: python manage.py runserver
+    command: python manage.py runserver 0.0.0.0:8000
 ```
 
-Ahora solo necesitarás ejecutar `docker compose up` para levantar el servidor.
+Ahora levanta el servidor:
+
+```bash
+docker compose up
+```
+
+Abre tu navegador y ve a `http://localhost:8000/`. Deberías ver una página de bienvenida de Django.
+
+¡Enhorabuena! Django ya está funcionando en tu ordenador.
 
 ## Creando una aplicación
 
+Antes de continuar necesito que ejecutes el siguiente comando en la carpeta de tu proyecto:
+
+```shell
+sudo chown $USER:$USER -R .
+```
+
+De este modo podrás editar los archivos sin problemas.
+
+¡Ya no te distraigo más! Continuemos.
+
 ### Hola mundo
 
-Eidta el archivo `my_blog/views.py` y añade el siguiente código:
+Edita el archivo `my_blog/views.py` y añade el siguiente código:
 
 ```python
 from django.http import HttpResponse
@@ -193,8 +223,8 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', include('my_blog.urls')),
+    path('admin/', admin.site.urls),
 ]
 ```
 
@@ -212,7 +242,21 @@ Vamos a hacer algo más interesante: añadir información a la base de datos y m
 
 Django usa un ORM (Object-Relational Mapping) para interactuar con la base de datos. Esto significa que puedes usar Python para definir tus modelos y Django se encargará de crear las tablas en la base de datos. ¡Es super fácil!
 
-Primero crea un modelo en `my_blog/models.py`:
+Primero debemos informar a Django de nuestra nueva aplicación. Añade `my_blog` a la lista de aplicaciones instaladas en `my_app/settings.py`:
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'my_blog', # Nuevo
+]
+```
+
+Es el momento de crea un modelo en `my_blog/models.py`:
 
 ```python
 from django.db import models
@@ -227,7 +271,9 @@ class Article(models.Model):
         return self.title
 ```
 
-Ahora crea la migración y aplica los cambios a la base de datos:
+Los modelos son clases que representan tablas en la base de datos. Cada atributo de la clase es un campo en la tabla. En este caso, hemos creado un modelo `Article` con los campos `title`, `photo`, `description` y `date`.
+
+Ahora crea la migración y aplica los cambios a la base de datos. Abre otro terminal y ejecuta los siguientes comandos:
 
 ```bash
 docker compose run django python manage.py makemigrations
@@ -260,9 +306,11 @@ Entra en `http://localhost:8000/admin/`.
 docker compose run django python manage.py createsuperuser
 ```
 
-Sigue las instrucciones y ya puedes entrar en el panel administrativo.
+Sigue las instrucciones y ya puedes entrar en el panel administrativo. Puedes inventarte el email, lo importante es que recuerdes el usuario y la contraseña. Tranquila con tus datos, todo lo que pase entre tú y Django, se queda en tu ordenador. Estas guardando toda la información en tu base de datos local, en concreto en un archivo llamado `db.sqlite3` en la raíz de tu proyecto.
 
-Dentro crea algunos artículos. Nosotros te recomendamos que añadas alguna de las mujeres más importantes en la historia de la informática:
+Ya puedes añadir algunos artículos. Vuelve a `http://localhost:8000/admin/`, usa el usuario y la contraseña que has creado y añade algunos artículos.
+
+Nosotros te recomendamos que añadas alguna de las mujeres más importantes en la historia de la informática:
 
 - Margaret Hamilton: https://es.wikipedia.org/wiki/Margaret_Hamilton_(cient%C3%ADfica)
 - Grace Hopper: https://es.wikipedia.org/wiki/Grace_Hopper
@@ -279,14 +327,18 @@ Edita el archivo `my_blog/views.py` y sustituye todo el contenido con el siguien
 
 ```python
 from django.shortcuts import render
-from .models import Article
+from django.http import HttpResponse
+from .models import Article # Nuevo
 
-def article_list(request):
-    articles = Article.objects.all()
-    return render(request, 'my_blog/article_list.html', {'articles': articles})
+def hello_world(request):
+    return HttpResponse('Hola, mundo!')
+
+def article_list(request): # Nuevo
+    articles = Article.objects.all() # Nuevo
+    return render(request, 'article_list.html', {'articles': articles}) # Nuevo
 ```
 
-Crea un archivo `article_list.html` en la carpeta `my_blog/templates/my_blog` con el siguiente contenido:
+Crea un archivo `article_list.html` en la carpeta `my_blog/templates/` (deberás crearla) con el siguiente contenido:
 
 ```html
 <!DOCTYPE html>
@@ -315,10 +367,11 @@ from . import views
 
 urlpatterns = [
     path('', views.article_list, name='article_list'),
+        path('articles/', views.article_list, name='article_list'), # Nuevo
 ]
 ```
 
-Ves a `http://localhost:8000/` y deberías ver los artículos que has añadido en el panel administrativo.
+Ves a `http://localhost:8000/articles/` y deberías ver los artículos que has añadido en el panel administrativo.
 
 - Preguntas que puedes hacer al mentor: ¿Qué es HTML? ¿Qué es `for`? ¿De donde sale `article`?
 
@@ -329,38 +382,144 @@ Expansiones:
 
 ### Decorando un poco la página con CSS
 
-Vamos a añadir un poco de estilo a la página. Crea un archivo `style.css` en la carpeta `my_blog/static/css` con el siguiente contenido:
+Vamos a añadir un poco de estilo a la página. Crea un archivo `style.css` en la carpeta `static/css` (deberás crear ambas carpetas) con el siguiente contenido:
 
 ```css
+:root {
+    /* Paleta de colores vibrante y moderna */
+    --primary-color: #FF7EB6;    /* Rosa moderno */
+    --secondary-color: #7AF2FF;  /* Azul claro */
+    --accent-color: #FF65A3;     /* Rosa más intenso */
+    --background-gradient: linear-gradient(45deg, #fff5f5 0%, #f7f9ff 100%);
+    --text-color: #2E2E2E;
+    --soft-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    --spacing-unit: 1.5rem;
+    --border-radius: 20px;
+    --transition-fast: 0.3s ease;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', system-ui, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #f0f0f0;
-    color: #333;
+    padding: var(--spacing-unit) 0;
+    background-image: var(--background-gradient);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.8rem;
+    margin: 1.5em 0;
+    color: var(--primary-color);
+    text-shadow: 2px 2px 0 rgba(255, 126, 182, 0.1);
+    position: relative;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: var(--accent-color);
+    margin: 0.5em auto;
+    border-radius: 2px;
 }
 
 h2 {
-    color: #333;
+    color: var(--text-color);
+    font-size: 1.8rem;
+    margin-bottom: 1em;
+    position: relative;
+    padding-left: 1rem;
+}
+
+h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.35em;
+    height: 0.8em;
+    width: 4px;
+    background: var(--secondary-color);
+    border-radius: 2px;
 }
 
 article {
-    background-color: #fff;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    margin: var(--spacing-unit) auto;
+    padding: calc(var(--spacing-unit) * 1.5);
+    border-radius: var(--border-radius);
+    box-shadow: var(--soft-shadow);
+    max-width: 800px;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+article:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 img {
     max-width: 100%;
     height: auto;
+    border-radius: 12px;
+    margin: var(--spacing-unit) 0;
+    transition: transform var(--transition-fast);
+}
+
+img:hover {
+    transform: scale(1.02);
+}
+
+/* Efectos modernos */
+@media (prefers-reduced-motion: no-preference) {
+    article {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+}
+
+/* Mejoras de tipografía */
+p {
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+}
+
+/* Personalización de enlaces */
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    position: relative;
+}
+
+a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: currentColor;
+    transition: width var(--transition-fast);
+}
+
+a:hover::after {
+    width: 100%;
 }
 ```
 
-Y añade el archivo CSS a la plantilla `article_list.html`:
+Para que el archivo de estilos sea encontrado por el navegador, necesitaremos añadir a la plantilla HTML un par de lineas.
+
+Al inicio del archivo `article_list.html`, añade `{% load static %` y  `<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">` en la etiqueta `head`:
 
 ```html
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -380,11 +539,17 @@ Y añade el archivo CSS a la plantilla `article_list.html`:
 </html>
 ```
 
+Por último, dile a Django que sirva los archivos estáticos. Añade la siguiente línea al final de `my_app/settings.py`:
+
+```python
+STATICFILES_DIRS = [BASE_DIR / 'static']
+```
+
 Vuelve a cargar la página y deberías ver los cambios.
 
 ¡Bien hecho!
 
-- Preguntas que puedes hacer al mentor: ¿Qué es CSS? ¿Qué es `link`?
+- Preguntas que puedes hacer al mentor: ¿Qué es CSS? ¿Qué es `link`? ¿Qué es `static`? ¿Qué es `load`?
 
 Expansiones:
 
@@ -398,12 +563,13 @@ Vamos a añadir una página individual para cada artículo. Edita el archivo `my
 ```python
 def article_detail(request, pk):
     article = Article.objects.get(pk=pk)
-    return render(request, 'my_blog/article_detail.html', {'article': article})
+    return render(request, 'article_detail.html', {'article': article})
 ```
 
-Crea un archivo `article_detail.html` en la carpeta `my_blog/templates/my_blog` con el siguiente contenido:
+Crea un archivo `article_detail.html` en la carpeta `my_blog/templates` con el siguiente contenido:
 
 ```html
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -411,11 +577,14 @@ Crea un archivo `article_detail.html` en la carpeta `my_blog/templates/my_blog` 
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 <body>
-<h1>{{ article.title }}</h1>
-<img src="{{ article.photo.url }}" alt="{{ article.title }}">
-<p>{{ article.description }}</p>
+    <article>
+	<h1>{{ article.title }}</h1>
+	<img src="{{ article.photo.url }}" alt="{{ article.title }}">
+	<p>{{ article.description }}</p>
+    </article>
 </body>
 </html>
+
 ```
 
 Y añade la nueva vista a las URLs de la aplicación en `my_blog/urls.py`:
@@ -425,14 +594,17 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.article_list, name='article_list'),
-    path('<int:pk>/', views.article_detail, name='article_detail'),
+    path('', views.hello_world, name='hello_world'),
+    path('articles/', views.article_list, name='article_list'),
+    path('<int:pk>/', views.article_detail, name='article_detail'), # Nuevo
 ]
+
 ```
 
 Para acceder a cada uno de los artículos, necesitas añadir un enlace en la plantilla `article_list.html`. Sustituiremos el contenido del artículo con el enlace para acceder a la página individual:
 
 ```html
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -453,6 +625,15 @@ Para acceder a cada uno de los artículos, necesitas añadir un enlace en la pla
 ```
 
 Vuelve a cargar la página y deberías ver los enlaces a las páginas individuales de cada artículo. Al pulsar sobre ellos, deberías ver la página individual.
+
+Fíjate en la URL. ¿Qué ves? ¿Qué crees que significa el número?
+
+Te dejo un par de retos:
+
+- ¿Cómo podrías cambiar la URL para que en lugar de un número, se vea el título del artículo?
+- ¿Cómo podrías añadir un enlace para volver a la lista de artículos?
+
+Te recomiendo hacer una busqueda en internet para encontrar la solución. Si no encuentras nada, pregunta a tu mentor.
 
 ¡Enhorabuena! Has creado un blog con Django.
 
