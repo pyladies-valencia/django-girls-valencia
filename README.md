@@ -373,12 +373,33 @@ urlpatterns = [
 
 Ves a `http://localhost:8000/articles/` y deberías ver los artículos que has añadido en el panel administrativo.
 
+Un momento... ¿por qué no se ven las imágenes? En el siguiente apartado lo solucionaremos.
+
 - Preguntas que puedes hacer al mentor: ¿Qué es HTML? ¿Qué es `for`? ¿De donde sale `article`?
 
 Expansiones:
 
 - [Tutorial de HTML por Mozilla](https://developer.mozilla.org/es/docs/Learn/HTML/Introduction_to_HTML).
 - [Tutorial de HTML por Andros Fenollosa](https://programadorwebvalencia.com/cursos/html/).
+
+### Mostrando imágenes
+
+Todo el contenido que subamos a la base de datos se guardará en la carpeta `media`. Para que Django pueda servir estos archivos, necesitamos añadir las rutas a `my_app/urls.py`:
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings # Nuevo
+from django.conf.urls.static import static # Nuevo
+
+urlpatterns = [
+    path('', include('my_blog.urls')),
+    path('admin/', admin.site.urls),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # Nuevo
+```
+
+Ahora ya deberías ver las imágenes en la página.
+
 
 ### Decorando un poco la página con CSS
 
