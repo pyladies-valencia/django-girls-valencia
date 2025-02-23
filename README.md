@@ -84,9 +84,11 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # install dependencies
-COPY requirements.txt .
+COPY . .
 RUN pip3 install --no-cache-dir --upgrade pip
 RUN pip3 install --no-cache-dir -r requirements.txt
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:10000"]
 ```
 
 Acabas de definir una imagen. Sirven para crear contenedores. Un contenedor es una instancia de una imagen. Para crear un contenedor, necesitas un archivo `compose.yml`.
@@ -101,7 +103,7 @@ services:
     volumes:
       - .:/usr/src/app/
     ports:
-    - "8000:8000"
+    - "10000:10000"
 ```
 
 Ya esta tu entorno de desarrollo listo.
@@ -131,6 +133,14 @@ Ahora crea un proyecto Django:
 docker compose run django django-admin startproject my_app .
 docker compose run django python manage.py startapp my_blog
 cd my_blog
+```
+
+Si tienes problemas con docker, podrás hacerlo [instalando python](https://www.python.org/downloads/)
+```bash
+pip install -r requirements.txt
+django-admin startproject my_app . # Linux o Mac
+django-admin.exe startproject my_app . # Windows
+python manage.py startapp my_blog
 ```
 
 - Preguntas que puedes hacer al mentor: ¿Qué es un proyecto Django? ¿Qué es una aplicación Django? ¿Por qué necesitamos un archivo `requirements.txt`?
@@ -168,8 +178,8 @@ services:
     volumes:
       - .:/usr/src/app/
     ports:
-    - "8000:8000"
-    command: python manage.py runserver 0.0.0.0:8000
+    - "10000:10000"
+    command: python manage.py runserver 0.0.0.0:10000
 ```
 
 Ahora levanta el servidor:
@@ -178,7 +188,13 @@ Ahora levanta el servidor:
 docker compose up
 ```
 
-Abre tu navegador y ve a `http://localhost:8000/`. Deberías ver una página de bienvenida de Django.
+Si no tienes docker:
+
+```bash
+python manage.py runserver 
+```
+
+Abre tu navegador y ve a `http://localhost:10000/`. Deberías ver una página de bienvenida de Django.
 
 ¡Enhorabuena! Django ya está funcionando en tu ordenador.
 
@@ -228,7 +244,7 @@ urlpatterns = [
 ]
 ```
 
-Ahora ve a `http://localhost:8000/` y deberías ver el mensaje `Hola, mundo!`.
+Ahora ve a `http://localhost:10000/` y deberías ver el mensaje `Hola, mundo!`.
 
 Te felicito, acabas de crear tu primera aplicación Django. Tal vez un poco minimalista, pero es un buen comienzo.
 
@@ -280,6 +296,12 @@ docker compose run django python manage.py makemigrations
 docker compose run django python manage.py migrate
 ```
 
+Si no tienes docker:
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
 - Preguntas que puedes hacer al mentor: ¿Qué es un modelo? ¿Qué es un ORM? ¿Qué es una migración?
 
 La base de datos ya esta lista. Ahora vamos a añadir algunos artículos.
@@ -298,7 +320,7 @@ admin.site.register(Article)
 
 Ya se ha creado un panel administrativo para que puedas añadir, editar y borrar artículos.
 
-Entra en `http://localhost:8000/admin/`.
+Entra en `http://localhost:10000/admin/`.
 
 ¡Ups! ¿Cual es la contraseña? No te preocupes, vamos a crear un superusuario.
 
@@ -306,9 +328,15 @@ Entra en `http://localhost:8000/admin/`.
 docker compose run django python manage.py createsuperuser
 ```
 
+Si no tienes docker:
+
+```bash
+python manage.py createsuperuser
+```
+
 Sigue las instrucciones y ya puedes entrar en el panel administrativo. Puedes inventarte el email, lo importante es que recuerdes el usuario y la contraseña. Tranquila con tus datos, todo lo que pase entre tú y Django, se queda en tu ordenador. Estas guardando toda la información en tu base de datos local, en concreto en un archivo llamado `db.sqlite3` en la raíz de tu proyecto.
 
-Ya puedes añadir algunos artículos. Vuelve a `http://localhost:8000/admin/`, usa el usuario y la contraseña que has creado y añade algunos artículos.
+Ya puedes añadir algunos artículos. Vuelve a `http://localhost:10000/admin/`, usa el usuario y la contraseña que has creado y añade algunos artículos.
 
 Nosotros te recomendamos que añadas alguna de las mujeres más importantes en la historia de la informática:
 
@@ -367,11 +395,11 @@ from . import views
 
 urlpatterns = [
     path('', views.article_list, name='article_list'),
-        path('articles/', views.article_list, name='article_list'), # Nuevo
+    path('articles/', views.article_list, name='article_list'), # Nuevo
 ]
 ```
 
-Ves a `http://localhost:8000/articles/` y deberías ver los artículos que has añadido en el panel administrativo.
+Ves a `http://localhost:10000/articles/` y deberías ver los artículos que has añadido en el panel administrativo.
 
 Un momento... ¿por qué no se ven las imágenes? En el siguiente apartado lo solucionaremos.
 
@@ -579,7 +607,7 @@ Expansiones:
 
 ### Creando una página individual para cada artículo
 
-Vamos a añadir una página individual para cada artículo. Edita el archivo `my_blog/views.py` y añade el siguiente código:
+Vamos a añadir una página individual para cada artículo. Edita el archivo `my_blog/views.py` y añade el siguiente código al final del mismo:
 
 ```python
 def article_detail(request, pk):
@@ -659,6 +687,51 @@ Te recomiendo hacer una busqueda en internet para encontrar la solución. Si no 
 ¡Enhorabuena! Has creado un blog con Django.
 
 - Preguntas que puedes hacer al mentor: ¿Qué CSS deberíamos añadir para que los enlaces se vean como botones?
+
+## Publica tu web en internet
+
+Necesitas una cuenta en [dockerhub](https://hub.docker.com/) y [render](https://render.com/)
+
+Al crear tu cuenta en dockerhub crearás un nombre de usuario, usa ese nombre de usuario en los siguientes pasos.
+
+Pon el nombre de usuario en el archivo settings.py en la variable DOCKER_USER y añade este código al final:
+
+```python
+DOCKER_USER = "adalovelace"
+
+DOMAIN = f"{DOCKER_USER}-django-girls-valencia.onrender.com"
+
+ALLOWED_HOSTS = [DOMAIN, "localhost", "127.0.0.1"]
+
+CSRF_TRUSTED_ORIGINS = [f"https://{DOMAIN}"]
+```
+
+Usaremos docker para empaquetar todo el contenido de tu web, al igual que antes reemplazada DOCKER_USER con tu nombre de usuario.
+
+Al ejecutar los siguientes comando se te solicitará usuario y contraseña de tu cuenta de dockerhub.
+```bash
+DOCKER_USER=adalovelace
+docker build --no-cache -t $DOCKER_USER/django-girls-valencia:latest .
+docker push $DOCKER_USER/django-girls-valencia:latest
+```
+
+Una vez publicado, crea un proyecto en render. El nombre del proyecto debe ser "NombreDeUsuario Django Girls Valencia", en el caso de ejemplo sería:
+
+Adalovelace Django Girls Valencia
+
+Selecciona el despliegue del proyecto con una imagen existente de docker, el nombre de la imagen tiene el siguiente formato NombreDeUsuario/django-girls-valencia:latest. En el caso de ejemplo sería:
+
+adalovelace/django-girls-valencia:latest
+
+Selecciona la región Frankfurt (EU Central) y el plan gratuito.
+
+Haz click en Desplegar el servicio, espera unos minutos y... ¡la web ya estará disponible!
+
+https://adalovelace-django-girls-valencia.onrender.com/articles
+
+Al igual que en los casos anteriores reemplaza tu nombre en la url.
+
+- Preguntas que puedes hacer al mentor: ¿Existen alternativas a docker y render para publicar la web?
 
 ## Expandindo tu blog
 
