@@ -1,5 +1,29 @@
 # Django Girls Valencia
 
+# Tabla de Contenidos
+
+1. [Bienvenida](#welcome)
+2. [¿Qué es Python? ¿Por qué Python?](#que-es-python)
+3. [¿Qué es Django? ¿Por qué Django? Alternativas y sus diferencias](#que-es-django)
+4. [Preparando el entorno de desarrollo](#preparando-el-entorno-de-desarrollo)  
+   4.1 [Editor de código o IDE](#editor-de-código-o-ide)  
+   4.2 [Docker](#docker)  
+5. [Creando un proyecto Django](#creando-un-proyecto-django)  
+   5.1 [Configuraciones básicas](#configuraciones-básicas)  
+   5.2 [Base de datos](#base-de-datos)  
+   5.3 [Levantando el servidor](#levantando-el-servidor)  
+6. [Creando una aplicación](#creando-una-aplicación)  
+   6.1 [Hola Mundo](#hola-mundo)  
+7. [Listado de artículos](#listado-de-artículos)  
+   7.1 [Creando un modelo para guardar la información en la base de datos](#creando-un-modelo-para-guardar-la-información-en-la-base-de-datos)  
+   7.2 [Configurando Admin de Django](#configurando-admin-de-django)  
+   7.3 [Mostrando los artículos en la página principal](#mostrando-los-artículos-en-la-página-principal)  
+   7.4 [Mostrando imágenes](#mostrando-imágenes)  
+   7.5 [Decorando un poco la página con CSS](#decorando-un-poco-la-página-con-css)  
+   7.6 [Creando una página individual para cada artículo](#creando-una-página-individual-para-cada-artículo)
+8. [Publica tu web en internet](#publica-tu-web-en-internet)
+9. [Expandiendo tu blog](#expandiendo-tu-blog)
+
 ## Welcome
 
 Bienvenida a un taller para dar tus primeros pasos en el mundo de la programación o, en caso de ser una veterana en el lenguaje, la posibilidad para ampliar tus conocimientos en el lenguaje.
@@ -16,7 +40,9 @@ No esperamos que lo termines todo, pero si lo haces, ¡enhorabuena! Habrás crea
 
 ¿Estás preparada? ¡Vamos a ello!
 
-### ¿Qué es Python? ¿Por qué Python?
+<div id='que-es-python'>
+
+## ¿Qué es Python? ¿Por qué Python?
 
 Python es un lenguaje de programación interpretado cuya filosofía hace hincapié en una sintaxis que favorezca un código legible. Se trata de un lenguaje de programación multiparadigma, ya que soporta orientación a objetos, programación imperativa y, en menor medida, programación funcional. Lo único importante para ti es que es perfecto para principiantes y expertos, y es uno de los lenguajes más populares en la actualidad.
 
@@ -35,6 +61,8 @@ En caso contrario, puedes saltarte esta parte.
 Expansiones:
 
 - [Tutorial de Python](https://developer.mozilla.org/es/docs/Glossary/Python)
+
+<div id='que-es-django' />
 
 ### ¿Qué es Django? ¿Por qué Django? Alternativas y sus diferencias
 
@@ -741,7 +769,7 @@ Al igual que en los casos anteriores reemplaza tu nombre en la url.
 
 - Preguntas que puedes hacer al mentor: ¿Existen alternativas a docker y render para publicar la web?
 
-## Expandindo tu blog
+## Expandiendo tu blog
 
 Habla con tu mentora sobre cómo puedes expandir tu blog. Aquí tienes algunas ideas:
 
