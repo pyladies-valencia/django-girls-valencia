@@ -133,7 +133,17 @@ docker compose run django python manage.py startapp my_blog
 cd my_blog
 ```
 
+Si tienes problemas con docker, podrás hacerlo [instalando python](https://www.python.org/downloads/)
+```bash
+pip install -r requirements.txt
+django-admin startproject my_app . # Linux o Mac
+django-admin.exe startproject my_app . # Windows
+python manage.py startapp my_blog
+```
+
+
 - Preguntas que puedes hacer a tu mentora: ¿Qué es un proyecto Django? ¿Qué es una aplicación Django? ¿Por qué necesitamos un archivo `requirements.txt`?
+
 
 
 ### Configuraciones básicas
@@ -176,6 +186,12 @@ Ahora levanta el servidor:
 
 ```bash
 docker compose up
+```
+
+Si no tienes docker:
+
+```bash
+python manage.py runserver 
 ```
 
 Abre tu navegador y ve a `http://localhost:8000/`. Deberías ver una página de bienvenida de Django.
@@ -280,7 +296,14 @@ docker compose run django python manage.py makemigrations
 docker compose run django python manage.py migrate
 ```
 
+Si no tienes docker:
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
 - Preguntas que puedes hacer a tu mentora: ¿Qué es un modelo? ¿Qué es un ORM? ¿Qué es una migración?
+
 
 La base de datos ya está lista. Ahora vamos a añadir algunos artículos.
 
@@ -306,7 +329,14 @@ Entra en `http://localhost:8000/admin/`.
 docker compose run django python manage.py createsuperuser
 ```
 
+Si no tienes docker:
+
+```bash
+python manage.py createsuperuser
+```
+
 Sigue las instrucciones y ya puedes entrar en el panel administrativo. Puedes inventarte el email, lo importante es que recuerdes el usuario y la contraseña. Tranquila con tus datos, todo lo que pase entre tú y Django, se queda en tu ordenador. Estás guardando toda la información en tu base de datos local, en concreto en un archivo llamado `db.sqlite3` en la raíz de tu proyecto.
+
 
 Ya puedes añadir algunos artículos. Vuelve a `http://localhost:8000/admin/`, usa el usuario y la contraseña que has creado y añade algunos artículos.
 
@@ -367,7 +397,7 @@ from . import views
 
 urlpatterns = [
     path('', views.article_list, name='article_list'),
-        path('articles/', views.article_list, name='article_list'), # Nuevo
+    path('articles/', views.article_list, name='article_list'), # Nuevo
 ]
 ```
 
@@ -579,7 +609,7 @@ Expansiones:
 
 ### Creando una página individual para cada artículo
 
-Vamos a añadir una página individual para cada artículo. Edita el archivo `my_blog/views.py` y añade el siguiente código:
+Vamos a añadir una página individual para cada artículo. Edita el archivo `my_blog/views.py` y añade el siguiente código al final del mismo:
 
 ```python
 def article_detail(request, pk):
