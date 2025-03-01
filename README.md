@@ -84,9 +84,11 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # install dependencies
-COPY requirements.txt .
+COPY . .
 RUN pip3 install --no-cache-dir --upgrade pip
 RUN pip3 install --no-cache-dir -r requirements.txt
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:10000"]
 ```
 
 Acabas de definir una imagen. Sirven para crear contenedores. Un contenedor es una instancia de una imagen. Para crear un contenedor, necesitas un archivo `compose.yml`.
@@ -101,7 +103,7 @@ services:
     volumes:
       - .:/usr/src/app/
     ports:
-    - "8000:8000"
+    - "10000:10000"
 ```
 
 Ya está tu entorno de desarrollo listo.
@@ -145,7 +147,6 @@ python manage.py startapp my_blog
 - Preguntas que puedes hacer a tu mentora: ¿Qué es un proyecto Django? ¿Qué es una aplicación Django? ¿Por qué necesitamos un archivo `requirements.txt`?
 
 
-
 ### Configuraciones básicas
 
 Edita el archivo `my_app/settings.py` para asegurarte de que las configuraciones de bases de datos, aplicaciones instaladas, y middleware sean correctas. En principio no necesitas cambiar nada, pero es bueno saber dónde están estas configuraciones.
@@ -178,8 +179,8 @@ services:
     volumes:
       - .:/usr/src/app/
     ports:
-    - "8000:8000"
-    command: python manage.py runserver 0.0.0.0:8000
+    - "10000:10000"
+    command: python manage.py runserver 0.0.0.0:10000
 ```
 
 Ahora levanta el servidor:
@@ -194,7 +195,9 @@ Si no tienes docker:
 python manage.py runserver 
 ```
 
-Abre tu navegador y ve a `http://localhost:8000/`. Deberías ver una página de bienvenida de Django.
+
+Abre tu navegador y ve a `http://localhost:10000/`. Deberías ver una página de bienvenida de Django.
+
 
 ¡Enhorabuena! Django ya está funcionando en tu ordenador.
 
@@ -244,7 +247,7 @@ urlpatterns = [
 ]
 ```
 
-Ahora ve a `http://localhost:8000/` y deberías ver el mensaje `Hola, mundo!`.
+Ahora ve a `http://localhost:10000/` y deberías ver el mensaje `Hola, mundo!`.
 
 Te felicito, acabas de crear tu primera aplicación Django. Tal vez un poco minimalista, pero es un buen comienzo.
 
@@ -302,7 +305,9 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
+
 - Preguntas que puedes hacer a tu mentora: ¿Qué es un modelo? ¿Qué es un ORM? ¿Qué es una migración?
+
 
 
 La base de datos ya está lista. Ahora vamos a añadir algunos artículos.
@@ -321,7 +326,7 @@ admin.site.register(Article)
 
 Ya se ha creado un panel administrativo para que puedas añadir, editar y borrar artículos.
 
-Entra en `http://localhost:8000/admin/`.
+Entra en `http://localhost:10000/admin/`.
 
 ¡Ups! ¿Cual es la contraseña? No te preocupes, vamos a crear un superusuario.
 
@@ -335,10 +340,11 @@ Si no tienes docker:
 python manage.py createsuperuser
 ```
 
+
 Sigue las instrucciones y ya puedes entrar en el panel administrativo. Puedes inventarte el email, lo importante es que recuerdes el usuario y la contraseña. Tranquila con tus datos, todo lo que pase entre tú y Django, se queda en tu ordenador. Estás guardando toda la información en tu base de datos local, en concreto en un archivo llamado `db.sqlite3` en la raíz de tu proyecto.
 
 
-Ya puedes añadir algunos artículos. Vuelve a `http://localhost:8000/admin/`, usa el usuario y la contraseña que has creado y añade algunos artículos.
+Ya puedes añadir algunos artículos. Vuelve a `http://localhost:10000/admin/`, usa el usuario y la contraseña que has creado y añade algunos artículos.
 
 Nosotras te recomendamos que añadas alguna de las mujeres más importantes en la historia de la informática:
 
@@ -401,7 +407,7 @@ urlpatterns = [
 ]
 ```
 
-Ves a `http://localhost:8000/articles/` y deberías ver los artículos que has añadido en el panel administrativo.
+Ves a `http://localhost:10000/articles/` y deberías ver los artículos que has añadido en el panel administrativo.
 
 Un momento... ¿por qué no se ven las imágenes? En el siguiente apartado lo solucionaremos.
 
@@ -689,6 +695,51 @@ Te recomiendo hacer una busqueda en internet para encontrar la solución. Si no 
 ¡Enhorabuena! Has creado un blog con Django.
 
 - Preguntas que puedes hacer a tu mentora: ¿Qué CSS deberíamos añadir para que los enlaces se vean como botones?
+
+## Publica tu web en internet
+
+Necesitas una cuenta en [dockerhub](https://hub.docker.com/) y [render](https://render.com/)
+
+Al crear tu cuenta en dockerhub crearás un nombre de usuario, usa ese nombre de usuario en los siguientes pasos.
+
+Pon el nombre de usuario en el archivo settings.py en la variable DOCKER_USER y añade este código al final:
+
+```python
+DOCKER_USER = "adalovelace"
+
+DOMAIN = f"{DOCKER_USER}-django-girls-valencia.onrender.com"
+
+ALLOWED_HOSTS = [DOMAIN, "localhost", "127.0.0.1"]
+
+CSRF_TRUSTED_ORIGINS = [f"https://{DOMAIN}"]
+```
+
+Usaremos docker para empaquetar todo el contenido de tu web, al igual que antes reemplazada DOCKER_USER con tu nombre de usuario.
+
+Al ejecutar los siguientes comando se te solicitará usuario y contraseña de tu cuenta de dockerhub.
+```bash
+DOCKER_USER=adalovelace
+docker build --no-cache -t $DOCKER_USER/django-girls-valencia:latest .
+docker push $DOCKER_USER/django-girls-valencia:latest
+```
+
+Una vez publicado, crea un proyecto en render. El nombre del proyecto debe ser "NombreDeUsuario Django Girls Valencia", en el caso de ejemplo sería:
+
+Adalovelace Django Girls Valencia
+
+Selecciona el despliegue del proyecto con una imagen existente de docker, el nombre de la imagen tiene el siguiente formato NombreDeUsuario/django-girls-valencia:latest. En el caso de ejemplo sería:
+
+adalovelace/django-girls-valencia:latest
+
+Selecciona la región Frankfurt (EU Central) y el plan gratuito.
+
+Haz click en Desplegar el servicio, espera unos minutos y... ¡la web ya estará disponible!
+
+https://adalovelace-django-girls-valencia.onrender.com/articles
+
+Al igual que en los casos anteriores reemplaza tu nombre en la url.
+
+- Preguntas que puedes hacer al mentor: ¿Existen alternativas a docker y render para publicar la web?
 
 ## Expandindo tu blog
 
