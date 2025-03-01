@@ -9,12 +9,12 @@ Tal vez estés asustada. ¡No te preocupes si no tienes experiencia previa pican
 Solo te pedimos 3 requisitos para empezar:
 
 - Un ordenador con conexión a internet.
-- Seguir las instrucciones de tu mentor.
+- Seguir las instrucciones de tu mentora.
 - Ganas de aprender.
 
-No esperamos que lo termines todo, pero si lo haces, ¡enhorabuena! Habrás creado tu primer blog con Django. Te animamos a que mantengas una comunicación fluida con tu mentor y le hagas todas las preguntas que necesites.
+No esperamos que lo termines todo, pero si lo haces, ¡enhorabuena! Habrás creado tu primer blog con Django. Te animamos a que mantengas una comunicación fluida con tu mentora y le hagas todas las preguntas que necesites.
 
-¿Estas preparada? ¡Vamos a ello!
+¿Estás preparada? ¡Vamos a ello!
 
 ### ¿Qué es Python? ¿Por qué Python?
 
@@ -40,7 +40,7 @@ Expansiones:
 
 Django es un framework web para construir apicaciones web en Python (un blog, un ecommerce, una red social, etc). Lo usaremos para construir fácilmente nuestro blog.
 
-- Preguntas que puedes hacer al mentor: ¿Qué es un framework web? ¿Qué otros frameworks web existen? ¿Por qué Django es tan popular?
+- Preguntas que puedes hacer a tu mentora: ¿Qué es un framework web? ¿Qué otros frameworks web existen? ¿Por qué Django es tan popular?
 
 Expansiones:
 
@@ -56,7 +56,7 @@ Para este tutorial, usaremos [VS Code](https://code.visualstudio.com/), un edito
 
 Docker es una plataforma de software que permite a los desarrolladores, administradores de sistemas y otros usuarios empaquetar, distribuir y ejecutar aplicaciones en contenedores. Los contenedores son procesos independientes entre sí y pueden tener sus propias versiones de software, librerías y configuraciones. Muy útil para tener un entorno de desarrollo que no entre en conflicto con otros proyectos.
 
-- Preguntas que puedes hacer al mentor: ¿Qué es un contenedor? ¿Qué es un entorno de desarrollo? ¿Qué es un conflicto de versiones?
+- Preguntas que puedes hacer a tu mentora: ¿Qué es un contenedor? ¿Qué es un entorno de desarrollo? ¿Qué es un conflicto de versiones?
 
 Crea un archivo `Dockerfile` en la raíz de tu proyecto con el siguiente contenido:
 
@@ -106,9 +106,9 @@ services:
     - "10000:10000"
 ```
 
-Ya esta tu entorno de desarrollo listo.
+Ya está tu entorno de desarrollo listo.
 
-- Preguntas que puedes hacer al mentor: ¿Qué es un archivo `Dockerfile`? ¿Qué es un archivo `compose.yml`?
+- Preguntas que puedes hacer a tu mentora: ¿Qué es un archivo `Dockerfile`? ¿Qué es un archivo `compose.yml`?
 
 Expansiones:
 
@@ -143,7 +143,8 @@ django-admin.exe startproject my_app . # Windows
 python manage.py startapp my_blog
 ```
 
-- Preguntas que puedes hacer al mentor: ¿Qué es un proyecto Django? ¿Qué es una aplicación Django? ¿Por qué necesitamos un archivo `requirements.txt`?
+
+- Preguntas que puedes hacer a tu mentora: ¿Qué es un proyecto Django? ¿Qué es una aplicación Django? ¿Por qué necesitamos un archivo `requirements.txt`?
 
 
 ### Configuraciones básicas
@@ -157,7 +158,7 @@ Una base de datos es un sistema de almacenamiento de información. Piensa en ell
 
 Django por defecto usa SQLite, un motor de base de datos ligero y fácil de usar. Para este tutorial, SQLite es suficiente. Si necesitas usar otro motor de base de datos, puedes cambiar la configuración en `my_app/settings.py`. Django soporta muchos motores de base de datos, como PostgreSQL, MySQL, Oracle, etc. No es necesario modificar nada.
 
-- Preguntas que puedes hacer al mentor: ¿Qué es una base de datos? ¿Qué es un motor de base de datos? ¿Qué es SQLite? ¿Qué otros motores de base de datos existen?
+- Preguntas que puedes hacer a tu mentora: ¿Qué es una base de datos? ¿Qué es un motor de base de datos? ¿Qué es SQLite? ¿Qué otros motores de base de datos existen?
 
 Expansiones:
 
@@ -194,7 +195,9 @@ Si no tienes docker:
 python manage.py runserver 
 ```
 
+
 Abre tu navegador y ve a `http://localhost:10000/`. Deberías ver una página de bienvenida de Django.
+
 
 ¡Enhorabuena! Django ya está funcionando en tu ordenador.
 
@@ -250,7 +253,7 @@ Te felicito, acabas de crear tu primera aplicación Django. Tal vez un poco mini
 
 Vamos a hacer algo más interesante: añadir información a la base de datos y mostrarla en la página.
 
-- Preguntas que puedes hacer al mentor: ¿Qué es una vista? ¿Qué es una URL?
+- Preguntas que puedes hacer a tu mentora: ¿Qué es una vista? ¿Qué es una URL?
 
 ## Listado de artículos
 
@@ -302,9 +305,12 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-- Preguntas que puedes hacer al mentor: ¿Qué es un modelo? ¿Qué es un ORM? ¿Qué es una migración?
 
-La base de datos ya esta lista. Ahora vamos a añadir algunos artículos.
+- Preguntas que puedes hacer a tu mentora: ¿Qué es un modelo? ¿Qué es un ORM? ¿Qué es una migración?
+
+
+
+La base de datos ya está lista. Ahora vamos a añadir algunos artículos.
 
 ### Configurando Admin de Django
 
@@ -334,18 +340,20 @@ Si no tienes docker:
 python manage.py createsuperuser
 ```
 
-Sigue las instrucciones y ya puedes entrar en el panel administrativo. Puedes inventarte el email, lo importante es que recuerdes el usuario y la contraseña. Tranquila con tus datos, todo lo que pase entre tú y Django, se queda en tu ordenador. Estas guardando toda la información en tu base de datos local, en concreto en un archivo llamado `db.sqlite3` en la raíz de tu proyecto.
+
+Sigue las instrucciones y ya puedes entrar en el panel administrativo. Puedes inventarte el email, lo importante es que recuerdes el usuario y la contraseña. Tranquila con tus datos, todo lo que pase entre tú y Django, se queda en tu ordenador. Estás guardando toda la información en tu base de datos local, en concreto en un archivo llamado `db.sqlite3` en la raíz de tu proyecto.
+
 
 Ya puedes añadir algunos artículos. Vuelve a `http://localhost:10000/admin/`, usa el usuario y la contraseña que has creado y añade algunos artículos.
 
-Nosotros te recomendamos que añadas alguna de las mujeres más importantes en la historia de la informática:
+Nosotras te recomendamos que añadas alguna de las mujeres más importantes en la historia de la informática:
 
 - Margaret Hamilton: https://es.wikipedia.org/wiki/Margaret_Hamilton_(cient%C3%ADfica)
 - Grace Hopper: https://es.wikipedia.org/wiki/Grace_Hopper
 - Mujeres ENIAC: https://es.wikipedia.org/wiki/ENIAC#Mujeres_programadoras_del_EN
 - Ángela Ruiz Robles: https://es.wikipedia.org/wiki/%C3%81ngela_Ruiz_Robles
 
-- Preguntas que puedes hacer al mentor: ¿Qué es un superusuario? ¿Qué es un panel administrativo?
+- Preguntas que puedes hacer a tu mentora: ¿Qué es un superusuario? ¿Qué es un panel administrativo?
 
 Ahora necesitaremos mostrar estos artículos en la página principal.
 
@@ -403,7 +411,7 @@ Ves a `http://localhost:10000/articles/` y deberías ver los artículos que has 
 
 Un momento... ¿por qué no se ven las imágenes? En el siguiente apartado lo solucionaremos.
 
-- Preguntas que puedes hacer al mentor: ¿Qué es HTML? ¿Qué es `for`? ¿De donde sale `article`?
+- Preguntas que puedes hacer a tu mentora: ¿Qué es HTML? ¿Qué es `for`? ¿De donde sale `article`?
 
 Expansiones:
 
@@ -598,7 +606,7 @@ Vuelve a cargar la página y deberías ver los cambios.
 
 ¡Bien hecho!
 
-- Preguntas que puedes hacer al mentor: ¿Qué es CSS? ¿Qué es `link`? ¿Qué es `static`? ¿Qué es `load`?
+- Preguntas que puedes hacer a tu mentora: ¿Qué es CSS? ¿Qué es `link`? ¿Qué es `static`? ¿Qué es `load`?
 
 Expansiones:
 
@@ -682,11 +690,11 @@ Te dejo un par de retos:
 - ¿Cómo podrías cambiar la URL para que en lugar de un número, se vea el título del artículo?
 - ¿Cómo podrías añadir un enlace para volver a la lista de artículos?
 
-Te recomiendo hacer una busqueda en internet para encontrar la solución. Si no encuentras nada, pregunta a tu mentor.
+Te recomiendo hacer una busqueda en internet para encontrar la solución. Si no encuentras nada, pregunta a tu mentora.
 
 ¡Enhorabuena! Has creado un blog con Django.
 
-- Preguntas que puedes hacer al mentor: ¿Qué CSS deberíamos añadir para que los enlaces se vean como botones?
+- Preguntas que puedes hacer a tu mentora: ¿Qué CSS deberíamos añadir para que los enlaces se vean como botones?
 
 ## Publica tu web en internet
 
@@ -735,7 +743,7 @@ Al igual que en los casos anteriores reemplaza tu nombre en la url.
 
 ## Expandindo tu blog
 
-Habla con tu mentor sobre cómo puedes expandir tu blog. Aquí tienes algunas ideas:
+Habla con tu mentora sobre cómo puedes expandir tu blog. Aquí tienes algunas ideas:
 
 - Usar un sistema de plantillas para no repetir código HTML.
 - Añadir un sistema de likes.
