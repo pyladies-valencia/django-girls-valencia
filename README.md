@@ -6,8 +6,9 @@
 2. [¿Qué es Python? ¿Por qué Python?](#que-es-python)
 3. [¿Qué es Django? ¿Por qué Django? Alternativas y sus diferencias](#que-es-django)
 4. [Preparando el entorno de desarrollo](#preparando-el-entorno-de-desarrollo)  
-   4.1 [Editor de código o IDE](#editor-de-código-o-ide)  
-   4.2 [Docker](#docker)  
+   4.1 [Editor de código o IDE](#editor-de-código-o-ide)   
+   4.2 [Opción 1: Instalar Python en nuestro sistema](#instalar-python-en-nuestro-sistema)   
+   4.3 [Opción 2: Usar Docker](#docker)  
 5. [Creando un proyecto Django](#creando-un-proyecto-django)  
    5.1 [Configuraciones básicas](#configuraciones-básicas)  
    5.2 [Base de datos](#base-de-datos)  
@@ -21,7 +22,7 @@
    7.4 [Mostrando imágenes](#mostrando-imágenes)  
    7.5 [Decorando un poco la página con CSS](#decorando-un-poco-la-página-con-css)  
    7.6 [Creando una página individual para cada artículo](#creando-una-página-individual-para-cada-artículo)
-8. [Publica tu web en internet](#publica-tu-web-en-internet)
+8. [Opcional: Publica tu web en internet](#opcional-publica-tu-web-en-internet)
 9. [Expandiendo tu blog](#expandiendo-tu-blog)
 
 ## Welcome
@@ -80,11 +81,27 @@ Expansiones:
 
 Para este tutorial, usaremos [VS Code](https://code.visualstudio.com/), un editor popular y gratuito con buenas extensiones para Python y Django. Puedes usar cualquier otro editor o IDE que prefieras.
 
-### Docker
+<div id="instalar-python-en-nuestro-sistema" />
+
+## Opción 1: Instalar Python en nuestro sistema
+
+Lo primero que tendremos que hacer es instalar python en nuestro sistema operativo:
+- Los pasos a seguir para instalarlo en Windows se pueden seguir [aquí](https://tutorial.djangogirls.org/en/python_installation/#:~:text=Install%20Python%3A%20Windows).
+Acuérdate de reiniciar tu sistema después de instalar Python para que funcione correctamente.
+
+- Los pasos a seguir para instalarlo en MacOS se pueden seguir [aquí](https://tutorial.djangogirls.org/en/python_installation/#:~:text=Install%20Python%3A%20macOS)
+
+- Los pasos a seguir para instalarlo en Linux, aunque es probable que esté instalado por defecto, se pueden seguir [aquí](https://tutorial.djangogirls.org/en/python_installation/#:~:text=Install%20Python%3A%20Linux)
+
+<div id="docker" />
+
+### Opción 2: Usar Docker
 
 Docker es una plataforma de software que permite a los desarrolladores, administradores de sistemas y otros usuarios empaquetar, distribuir y ejecutar aplicaciones en contenedores. Los contenedores son procesos independientes entre sí y pueden tener sus propias versiones de software, librerías y configuraciones. Muy útil para tener un entorno de desarrollo que no entre en conflicto con otros proyectos.
 
 - Preguntas que puedes hacer a tu mentora: ¿Qué es un contenedor? ¿Qué es un entorno de desarrollo? ¿Qué es un conflicto de versiones?
+
+Lo primero que habrá que hacer es instalar Docker Desktop en nuestro sistema. [Aquí](https://docs.docker.com/desktop/setup/install/windows-install/) están las instrucciones, separadas por sistema operativo. Después de reiniciar el sistema, abre Docker Desktop y configura tu cuenta.
 
 Crea un archivo `Dockerfile` en la raíz de tu proyecto con el siguiente contenido:
 
@@ -157,18 +174,20 @@ Estamos definiendo las dependencias de nuestro proyecto. En este caso, Django (e
 
 Ahora crea un proyecto Django:
 
-```bash
-docker compose run django django-admin startproject my_app .
-docker compose run django python manage.py startapp my_blog
-cd my_blog
-```
-
-Si tienes problemas con docker, podrás hacerlo [instalando python](https://www.python.org/downloads/)
+- Directamente con Python:
 ```bash
 pip install -r requirements.txt
 django-admin startproject my_app . # Linux o Mac
 django-admin.exe startproject my_app . # Windows
+cd my_app # Para colocarnos en el directorio creado por django
 python manage.py startapp my_blog
+```
+
+- Con Docker:
+```bash
+docker compose run django django-admin startproject my_app .
+docker compose run django python manage.py startapp my_blog
+cd my_blog
 ```
 
 
@@ -197,7 +216,7 @@ Expansiones:
 
 Es el  momento de levantar el servidor de desarrollo de Django.
 
-Primero debemos editar el archivo `compose.yml` para que Django se quede funcionando:
+En caso de usar Docker, primero debemos editar el archivo `compose.yml` para que Django se quede funcionando:
 
 ```compose
 services:
@@ -217,7 +236,7 @@ Ahora levanta el servidor:
 docker compose up
 ```
 
-Si no tienes docker:
+Si no tienes docker y usas Python directamente:
 
 ```bash
 python manage.py runserver 
@@ -249,7 +268,7 @@ Edita el archivo `my_blog/views.py` y añade el siguiente código:
 from django.http import HttpResponse
 
 def hello_world(request):
-    return HttpResponse('Hola, mundo!')
+    return HttpResponse('¡Hola, mundo!')
 ```
 
 Ahora crea un archivo `urls.py` en la carpeta `my_blog` con el siguiente contenido:
@@ -275,7 +294,9 @@ urlpatterns = [
 ]
 ```
 
-Ahora ve a `http://localhost:10000/` y deberías ver el mensaje `Hola, mundo!`.
+Ahora ve a `http://localhost:10000/` y deberías ver el mensaje `¡Hola, mundo!`.
+
+Si cambias el contenido del mensaje `¡Hola, mundo!`, y guardas el fichero, el servidor debería reiniciarse automáticamente y, al refrescar la página, el contenido debería cambiar también.
 
 Te felicito, acabas de crear tu primera aplicación Django. Tal vez un poco minimalista, pero es un buen comienzo.
 
@@ -322,16 +343,19 @@ Los modelos son clases que representan tablas en la base de datos. Cada atributo
 
 Ahora crea la migración y aplica los cambios a la base de datos. Abre otro terminal y ejecuta los siguientes comandos:
 
+Si no tienes docker, directamente con Python:
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+Con Docker:
+
 ```bash
 docker compose run django python manage.py makemigrations
 docker compose run django python manage.py migrate
 ```
 
-Si no tienes docker:
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
 
 
 - Preguntas que puedes hacer a tu mentora: ¿Qué es un modelo? ¿Qué es un ORM? ¿Qué es una migración?
@@ -357,6 +381,8 @@ Ya se ha creado un panel administrativo para que puedas añadir, editar y borrar
 Entra en `http://localhost:10000/admin/`.
 
 ¡Ups! ¿Cual es la contraseña? No te preocupes, vamos a crear un superusuario.
+
+Con Docker:
 
 ```bash
 docker compose run django python manage.py createsuperuser
@@ -395,7 +421,7 @@ from django.http import HttpResponse
 from .models import Article # Nuevo
 
 def hello_world(request):
-    return HttpResponse('Hola, mundo!')
+    return HttpResponse('¡Hola, mundo!')
 
 def article_list(request): # Nuevo
     articles = Article.objects.all() # Nuevo
@@ -724,9 +750,10 @@ Te recomiendo hacer una busqueda en internet para encontrar la solución. Si no 
 
 - Preguntas que puedes hacer a tu mentora: ¿Qué CSS deberíamos añadir para que los enlaces se vean como botones?
 
-## Publica tu web en internet
+## Opcional: Publica tu web en internet
 
 Necesitas una cuenta en [dockerhub](https://hub.docker.com/) y [render](https://render.com/)
+También hace falta hacer la configuración con docker de los pasos anteriores (en vez de solo Python).
 
 Al crear tu cuenta en dockerhub crearás un nombre de usuario, usa ese nombre de usuario en los siguientes pasos.
 
@@ -742,7 +769,7 @@ ALLOWED_HOSTS = [DOMAIN, "localhost", "127.0.0.1"]
 CSRF_TRUSTED_ORIGINS = [f"https://{DOMAIN}"]
 ```
 
-Usaremos docker para empaquetar todo el contenido de tu web, al igual que antes reemplazada DOCKER_USER con tu nombre de usuario.
+Usaremos docker para empaquetar todo el contenido de tu web, al igual que antes reemplaza DOCKER_USER con tu nombre de usuario.
 
 Al ejecutar los siguientes comando se te solicitará usuario y contraseña de tu cuenta de dockerhub.
 ```bash
