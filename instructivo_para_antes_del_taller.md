@@ -41,6 +41,7 @@ Ten en cuenta que es probable que esté instalado predeterminadamente si tu sist
 ## Opción 2: usar Docker
 
 Docker es un software que permite empaquetar, distribuir y ejecutar aplicaciones en contenedores.
+Usando docker, si después del taller que tendremos quieres desplegar tu aplicación en internet, será mucho más sencillo.
 Resulta muy útil para tener un entorno de desarrollo que no entre en conflicto con otros proyectos.
 
 Para instalar Docker Desktop podemos seguir las instrucciones que se muestran a continuación dependiendo de nuestro sistema operativo:
