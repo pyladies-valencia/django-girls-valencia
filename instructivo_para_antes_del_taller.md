@@ -36,7 +36,7 @@ Los pasos a seguir para instalarlo en los diferentes sistemas operativos, se enc
 
 - [Linux](https://tutorial.djangogirls.org/en/python_installation/#:~:text=Install%20Python%3A%20Linux)
 
-  Te en cuenta que es probable que esté instalado predeterminadamente.
+Ten en cuenta que es probable que esté instalado predeterminadamente si tu sistema operativo es Linux.
 
 ## Opción 2: usar Docker
 
